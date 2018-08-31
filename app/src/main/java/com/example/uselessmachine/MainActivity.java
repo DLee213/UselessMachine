@@ -4,6 +4,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -26,7 +27,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListeners() {
         // TODO self destruct button
-
+        buttonSelfDestruct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSelfDestructSequence();
+            }
+        });
         switchUseless.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -43,6 +49,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void startSelfDestructSequence() {
+        // Disable the button
+        buttonSelfDestruct.setEnabled(false);
+        // Start a 10 second countdown timer that updates
+        // the display every second
+        new CountDownTimer(11000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                buttonSelfDestruct.setText("Self Destruct in " + millisUntilFinished / 1000 + "...");
+            }
+
+            public void onFinish() {
+                finish();
+            }
+        }.start();
+        // Want the button to show the countdown
+        // Destruct in 10...
+        // Destruct in 9...
+
+        //At the end, we're going to close the activity
+        // call the finish() method
+    }
+
     private void startSwitchOffTimer() {
         new CountDownTimer(5000, 5000) {
             @Override
@@ -56,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 switchUseless.setChecked(false);
-                Log.d(TAG, "onFinish: swtich set to false");
+                Log.d(TAG, "onFinish: switch set to false");
             }
         }.start();
     }
